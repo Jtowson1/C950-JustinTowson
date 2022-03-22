@@ -1,7 +1,12 @@
+# Justin Towson Student ID: #007204247
+
 import csv
 import datetime
 
 from HashTable import HashTable
+
+# This is a declaration of variables that will be used in multiple functions through the project
+# First_truck, Second_Truck, Third_truck is the manual loading of trucks for delivery
 
 if __name__ == '__main__':
     hashtable = HashTable()
@@ -16,6 +21,9 @@ if __name__ == '__main__':
     Second_truck_sorted = []
     Third_truck_sorted = []
     total_distance = []
+
+# This is the csv reader to input data from the WGUPS_Package_File.csv into the Package class
+# I added in delivery_start, delivery_status, delivery_time to keep track of the time it would leave, status, and delivery time
 
     with open('WGUPS_Package_File.csv', 'r') as csvfile:
         packageData = csv.reader(csvfile, delimiter=',')
@@ -36,6 +44,9 @@ if __name__ == '__main__':
                 delivery_time)
             hashtable.insert(packageID, package)
 
+# This is the csv reader to input the address data and the distance data into an adjacency matrix to be read in functions
+# distanceNameData was a list to separate just the address from the full csv list of information
+
     distanceNameData = []
     with open('Distance_Name_Data.csv') as csvfile:
         address_list = list(csv.reader(csvfile, delimiter=','))
@@ -45,6 +56,8 @@ if __name__ == '__main__':
     with open('Distance_Data.csv') as csvfile:
         distanceData = list(csv.reader(csvfile, delimiter=','))
 
+# This function would take two addresses and compare them on the distance matrix to see the distance between them
+# The space-time complexity of this function is 0(1)
 
         def getDistance(_row, _column):
             distance = distanceData[_row][_column]
@@ -53,6 +66,8 @@ if __name__ == '__main__':
 
             return float(distance)
 
+# This sets the time that the package would leave the hub depending on what truck it was in
+# This space-time complexity of this would be O(n^2) because of the 2 for loops it needs to loop through
 
     def set_deliver_start_time():
         for j in range(len(All_trucks)):
@@ -72,6 +87,10 @@ if __name__ == '__main__':
                     start_time[8] = Third_time
                     hashtable.insert(i, tuple(start_time))
 
+# This is an algorithm to sort the packages in the first truck using a nearest neighbor approach
+# It starts at location of the hub and searches for the closest delivery location and travels there until it has completed all the deliveries
+# It results in a sorted list of all the packages and calculates the mileage traveled to deliver
+# The space-time complexity of this is O(n^2) because of the while and for loop that it needs to go through to sort
 
     def first_truck_best_route():
         current_location = 0
@@ -98,6 +117,10 @@ if __name__ == '__main__':
             first_total_distance += shortest_distance
         total_distance.append(first_total_distance)
 
+# This is an algorithm to sort the packages in the second truck using a nearest neighbor approach
+# It starts at location of the hub and searches for the closest delivery location and travels there until it has completed all the deliveries
+# It results in a sorted list of all the packages and calculates the mileage traveled to deliver
+# The space-time complexity of this is O(n^2) because of the while and for loop that it needs to go through to sort
 
     def second_truck_best_route():
         current_location = 0
@@ -124,6 +147,10 @@ if __name__ == '__main__':
             second_total_distance += shortest_distance
         total_distance.append(second_total_distance)
 
+# This is an algorithm to sort the packages in the second truck using a nearest neighbor approach
+# It starts at location of the hub and searches for the closest delivery location and travels there until it has completed all the deliveries
+# It results in a sorted list of all the packages and calculates the mileage traveled to deliver
+# The space-time complexity of this is O(n^2) because of the while and for loop that it needs to go through to sort
 
     def third_truck_best_route():
         current_location = 0
@@ -157,6 +184,10 @@ if __name__ == '__main__':
     third_truck_best_route()
     All_trucks_sorted = [First_truck_sorted, Second_truck_sorted, Third_truck_sorted]
 
+# This is an algorithm to determine the time the package will be delivered and store it into a variable to be called later
+# The algorithm takes the sorted trucks list and loops through each list individually running the distance then converting that into seconds
+# to add to the initial time the truck took off.
+# The space-time complexity of this is O(n^2) because it is using two for loops to go through each individual list and calculate the delivery time
 
     def set_delivery_time():
         for i in range(len(All_trucks_sorted)):
@@ -216,6 +247,11 @@ if __name__ == '__main__':
                     hashtable.insert(Third_truck_sorted[j + 1], tuple(delivered_time))
 
     set_delivery_time()
+
+# This is the main interface for the user, it provides three options to check individual package information, all package information, and truck information
+# It uses the id_choice and time_choice variable as a reference to determine where the specific package would be at the time they are asking, or it just uses
+# time_choice1 to see where all package would be at that time. The last option just print the mileage for the 3 trucks to deliver all packages.
+# The space-time complexity of this would be O(n) because at most it uses 1 for loop to cycle through all package information and print it.
 
     print("Hello and Welcome to WGUPS User Interface!")
     print("Menu Options:")
